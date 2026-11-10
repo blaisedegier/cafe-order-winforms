@@ -1,30 +1,21 @@
 ﻿namespace CafeApp
 {
-    // Item Basket class
+    // The items on the current order.
     class Basket
     {
-        // Properties
-        private List<Item>? items;
+        private readonly List<Item> items = new List<Item>();
 
-        // Constructor
-        public Basket() => items = new List<Item>();
+        public void AddItem(Item item) => items.Add(item);
 
-        // Add item to basket
-        public void AddItem(Item item) => items?.Add(item);
-
-        // Display items in basket
+        // One line per item (name, quantity, unit price, line total) followed by the order total.
         public string DisplayItems()
         {
-            string display = "Name:\tQuantity\tPrice\n";
-            if (items != null)
+            string display = "Name\tQty\tPrice\tTotal\n";
+            foreach (Item item in items)
             {
-                foreach (Item item in items)
-                {
-                    display += $"{item.Name}\t{item.Quantity}\tR{item.Price}\n";
-                }
-                // Calculate total price
-                display += $"\nTotal Price: R{items.Sum(item => item.Price * item.Quantity)}";
+                display += $"{item.Name}\t{item.Quantity}\tR{item.Price}\tR{item.LineTotal}\n";
             }
+            display += $"\nOrder total: R{items.Sum(item => item.LineTotal)}";
             return display;
         }
     }
