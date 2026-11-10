@@ -46,6 +46,7 @@
             // 
             // cmbItem
             // 
+            cmbItem.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbItem.Font = new Font("Arial", 12F);
             cmbItem.FormattingEnabled = true;
             cmbItem.Items.AddRange(new object[] { "Espresso", "Cappuccino", "Latte", "Americano" });
@@ -58,6 +59,7 @@
             // 
             sedQuantity.Font = new Font("Arial", 12F);
             sedQuantity.Location = new Point(12, 217);
+            sedQuantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             sedQuantity.Name = "sedQuantity";
             sedQuantity.Size = new Size(195, 26);
             sedQuantity.TabIndex = 1;
@@ -79,6 +81,7 @@
             redDisplay.Font = new Font("Arial Black", 12F);
             redDisplay.Location = new Point(406, 0);
             redDisplay.Name = "redDisplay";
+            redDisplay.ReadOnly = true;
             redDisplay.Size = new Size(400, 375);
             redDisplay.TabIndex = 4;
             redDisplay.Text = "";

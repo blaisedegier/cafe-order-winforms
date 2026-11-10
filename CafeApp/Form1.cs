@@ -2,7 +2,8 @@ namespace CafeApp
 {
     public partial class Form1 : Form
     {
-        Basket basket = new Basket();
+        private readonly Basket basket = new Basket();
+
         public Form1()
         {
             InitializeComponent();
@@ -10,12 +11,25 @@ namespace CafeApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            basket.AddItem(new Item(cmbItem.Text, (int)sedQuantity.Value));
+            if (cmbItem.SelectedItem is not string drink)
+            {
+                MessageBox.Show("Please select a drink.", "Cafe");
+                return;
+            }
+
+            int quantity = decimal.ToInt32(sedQuantity.Value);
+            if (quantity < 1)
+            {
+                MessageBox.Show("Quantity must be at least 1.", "Cafe");
+                return;
+            }
+
+            basket.AddItem(new Item(drink, quantity));
         }
 
         private void btnDisplay_Click(object sender, EventArgs e)
         {
             redDisplay.Text = basket.DisplayItems();
         }
-    }          
+    }
 }
