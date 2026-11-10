@@ -50,3 +50,7 @@ C# 14, .NET 10 (`net10.0-windows`), Windows Forms. No NuGet packages.
 - The order is held in memory only and is lost when the window closes.
 - Windows only, as Windows Forms is.
 - No automated tests.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
