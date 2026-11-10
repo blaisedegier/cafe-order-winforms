@@ -1,169 +1,52 @@
-# CafeApp ☕
+# Cafe Order
 
-A Windows desktop application built with C# and Windows Forms that simulates a cafe ordering system. Users can browse a menu of coffee drinks, select quantities, build a basket, and view an itemized order summary with a running total. Prices are displayed in South African Rand (ZAR).
+A Windows Forms order screen for a coffee bar: pick drinks and quantities, then see the itemised order and its total in rand.
 
-## Table of Contents
+[![CI](https://github.com/blaisedegier/cafe-order-winforms/actions/workflows/ci.yml/badge.svg)](https://github.com/blaisedegier/cafe-order-winforms/actions/workflows/ci.yml)
 
-- [Features](#features)
-- [Menu](#menu)
-- [Screenshots](#screenshots)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [How It Works](#how-it-works)
-- [Building for Release](#building-for-release)
+## What it does
 
-## Features
+- Choose a drink from a fixed menu and a quantity of 1 or more, then press **Add Item** to put it on the order.
+- Press **Display** to list every line (drink, quantity, unit price, line total) and the order total.
 
-- **Drink Selection** - Choose from a curated menu of popular coffee drinks via a dropdown
-- **Quantity Control** - Set how many of each drink you want using a numeric spinner (defaults to 1)
-- **Add to Basket** - Build up your order one item at a time
-- **Order Summary** - View all items in your basket with individual line prices and a calculated grand total
-- **Clean UI** - Simple, intuitive two-panel layout with controls on the left and the order summary on the right
+| Drink      | Price |
+| ---------- | ----- |
+| Americano  | R15   |
+| Espresso   | R20   |
+| Cappuccino | R25   |
+| Latte      | R30   |
 
-## Menu
+## How it works
 
-| Drink      | Price (ZAR) |
-| ---------- | ----------- |
-| Americano  | R15         |
-| Espresso   | R20         |
-| Cappuccino | R25         |
-| Latte      | R30         |
+`Item` is one order line. Its constructor looks the unit price up from the drink name with a `switch` expression and
+throws for a name that is not on the menu or a quantity below 1, so an item can never be priced at zero by accident.
+The form backs this up at the edge: the drink box is a drop-down list (no free text), the quantity spinner starts at
+1, and the add handler asks for a selection before it builds an `Item`.
 
-## Screenshots
+`Basket` holds the lines in a `List<Item>` and formats the summary, summing the line totals with LINQ.
 
-> _Screenshots coming soon. Run the application to see the UI in action._
+## Running it
 
-## Tech Stack
-
-| Component | Technology               |
-| --------- | ------------------------ |
-| Language  | C# 12                    |
-| Framework | .NET 8 (Windows Desktop) |
-| UI        | Windows Forms (WinForms) |
-| IDE       | Visual Studio 2022       |
-
-## Prerequisites
-
-Before running CafeApp, make sure you have the following installed:
-
-- **Windows 10 or later**
-- **[.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)** (8.0 or newer)
-- **Visual Studio 2022** (optional, but recommended for the full designer experience)
-  - When installing via Visual Studio, ensure the **.NET desktop development** workload is selected
-
-You can verify your .NET SDK installation by running:
+Prerequisites: Windows and the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ```bash
-dotnet --version
+git clone https://github.com/blaisedegier/cafe-order-winforms.git
+cd cafe-order-winforms
+dotnet build CafeApp/CafeApp.sln -c Release
+dotnet run --project CafeApp/CafeApp.csproj
 ```
 
-## Getting Started
+Run the commands from the repository root: the root holds no project file, so they name the solution and project
+by path. Visual Studio users can open `CafeApp/CafeApp.sln`.
 
-### Option 1: Using the .NET CLI
+## Tech
 
-1. **Clone the repository**
+C# 12, .NET 8 (`net8.0-windows`), Windows Forms. No NuGet packages.
 
-   ```bash
-   git clone https://github.com/your-username/CafeApp.git
-   cd CafeApp
-   ```
+## Known limitations
 
-2. **Restore dependencies**
-
-   ```bash
-   dotnet restore CafeApp/CafeApp.csproj
-   ```
-
-3. **Build the project**
-
-   ```bash
-   dotnet build CafeApp/CafeApp.csproj
-   ```
-
-4. **Run the application**
-
-   ```bash
-   dotnet run --project CafeApp/CafeApp.csproj
-   ```
-
-### Option 2: Using Visual Studio
-
-1. Open `CafeApp/CafeApp.sln` in Visual Studio 2022
-2. Set the build configuration to **Debug** or **Release**
-3. Press **F5** (or click the green Start button) to build and run
-
-## Project Structure
-
-```text
-CafeApp/
-├── CafeApp.sln              # Visual Studio solution file
-├── CafeApp.csproj            # Project file (.NET 8, WinForms)
-├── Program.cs                # Application entry point
-├── Form1.cs                  # Main form logic (event handlers, basket interaction)
-├── Form1.Designer.cs         # Auto-generated UI layout and control definitions
-├── Form1.resx                # Form resource file
-├── Item.cs                   # Item model (drink name, quantity, price lookup)
-├── Basket.cs                 # Basket model (item collection, display formatting, total calculation)
-└── obj/                      # Build artifacts (auto-generated)
-```
-
-### Key Files
-
-| File                | Description                                                                 |
-| ------------------- | --------------------------------------------------------------------------- |
-| `Program.cs`        | Entry point that initializes the application and launches the main form     |
-| `Form1.cs`          | Handles user interactions: adding items to the basket and displaying orders |
-| `Form1.Designer.cs` | Defines the form layout, controls, fonts, and sizing                        |
-| `Item.cs`           | Represents a single menu item with name, quantity, and price                |
-| `Basket.cs`         | Manages a collection of items and generates the formatted order summary     |
-
-## How It Works
-
-### Application Flow
-
-1. The user selects a drink from the **ComboBox** dropdown (Espresso, Cappuccino, Latte, or Americano)
-2. The user sets the desired quantity using the **NumericUpDown** spinner
-3. Clicking **Add Item** creates a new `Item` instance and adds it to the `Basket`
-4. Clicking **Display** renders the full basket contents in the **RichTextBox**, showing each item's name, quantity, and line price, followed by the total
-
-### Architecture
-
-The application follows a straightforward object-oriented design:
-
-- **`Item`** - A model class that encapsulates a drink's name, quantity, and unit price. The price is determined automatically by a `switch` statement based on the drink name.
-- **`Basket`** - A collection class that holds a `List<Item>` and provides methods to add items and generate a formatted display string. The total is calculated using LINQ's `Sum` method.
-- **`Form1`** - The main form that ties the UI controls to the domain logic, acting as the controller between user input and the underlying models.
-
-### Pricing Logic
-
-When an `Item` is created, its unit price is assigned based on the drink name:
-
-```csharp
-switch (name)
-{
-    case "Espresso":    price = 20; break;
-    case "Cappuccino":  price = 25; break;
-    case "Latte":       price = 30; break;
-    case "Americano":   price = 15; break;
-}
-```
-
-The total is then calculated as the sum of `price * quantity` for every item in the basket.
-
-## Building for Release
-
-To create a release build for distribution:
-
-```bash
-dotnet publish CafeApp/CafeApp.csproj -c Release
-```
-
-The compiled output will be located in `CafeApp/bin/Release/net8.0-windows/publish/`.
-
-For a **self-contained** build (includes the .NET runtime so users don't need it installed):
-
-```bash
-dotnet publish CafeApp/CafeApp.csproj -c Release --self-contained -r win-x64
-```
+- The menu and prices are hard-coded in `Item.cs`.
+- Lines cannot be removed or edited once added, and adding the same drink twice gives two lines.
+- The order is held in memory only and is lost when the window closes.
+- Windows only, as Windows Forms is.
+- No automated tests.
