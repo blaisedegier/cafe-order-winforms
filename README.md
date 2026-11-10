@@ -27,7 +27,7 @@ The form backs this up at the edge: the drink box is a drop-down list (no free t
 
 ## Running it
 
-Prerequisites: Windows and the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Prerequisites: Windows and the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ```bash
 git clone https://github.com/blaisedegier/cafe-order-winforms.git
@@ -41,7 +41,7 @@ by path. Visual Studio users can open `CafeApp/CafeApp.sln`.
 
 ## Tech
 
-C# 12, .NET 8 (`net8.0-windows`), Windows Forms. No NuGet packages.
+C# 14, .NET 10 (`net10.0-windows`), Windows Forms. No NuGet packages.
 
 ## Known limitations
 
